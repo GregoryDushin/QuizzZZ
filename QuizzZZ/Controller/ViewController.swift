@@ -24,26 +24,24 @@ class ViewController: UIViewController {
 
     @IBAction func answerButtonPressed(_ sender: UIButton) {
         let userAnswer = sender.currentTitle!
-        quizzBrain.checkAnswer(userAnswer: userAnswer)
+        let userGotInRight = quizzBrain.checkAnswer(userAnswer: userAnswer)
         
-        if userAnswer == actualAnswer {
-            sender.backgroundColor = .green } else
-        { sender.backgroundColor = .red }
-        
-        if questionNumber + 1 < quiz.count{
-            questionNumber += 1
+        if userGotInRight {
+            sender.backgroundColor = .green
         } else {
-            questionNumber = 0
-        }
+                sender.backgroundColor = .red
+            }
+        
+        quizzBrain.nextQuestion()
         
         Timer.scheduledTimer(timeInterval: 0.2, target: self, selector: #selector(updateUI), userInfo: nil, repeats: false)
     }
     
     @objc func updateUI() {
-        questionLabel.text = quiz[questionNumber].text
+        questionLabel.text = quizzBrain.getQuestionText()
         trueButton.backgroundColor = .clear
         falseButton.backgroundColor = .clear
-        progressBar.progress = Float((questionNumber + 1)/quiz.count)
+        progressBar.progress = quizzBrain.getProgress()
     }
     
 }
